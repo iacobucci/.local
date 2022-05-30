@@ -1,0 +1,15 @@
+#!/bin/sh
+
+if [[ $# -eq 0 ]]; then 
+  echo "~/.config" ; cd ~/.config ; git pull ; echo "~/.local" ; cd ~/.local ; git pull
+else
+
+  if [[ $1 = "--pull" ]]; then
+    echo "~/.config" ; cd ~/.config ; git pull ; echo "~/.local" ; cd ~/.local ; git pull
+  fi
+
+  if [[ $1 = "--push" ]]; then
+    echo "~/.config" ; cd ~/.config ; git commit -a ; git push -u origin master ; echo "~/.local" ; cd ~/.local ; git add bin/script/* ; git commit -a ; git push -u origin master
+  fi
+fi
+

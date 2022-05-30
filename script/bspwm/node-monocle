@@ -1,0 +1,10 @@
+#!/bin/sh
+if xtitle $(bspc query -N -n) | grep -q "plank"  ; then
+  break
+else
+  if bspc query -N -n "focused.floating" >> /dev/null; then
+    bspc node -t tiled && bspc desktop -l next
+  else
+    bspc desktop -l next
+  fi
+fi

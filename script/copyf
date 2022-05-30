@@ -1,0 +1,6 @@
+#!/bin/sh
+>$HOME/.cache/copyfile
+
+for var in "$@"; do
+	echo $(pwd)/$var >>$HOME/.cache/copyfile
+done

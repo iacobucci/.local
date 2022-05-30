@@ -1,0 +1,32 @@
+#!/bin/sh
+if bspc query -N -n "focused.floating" >> /dev/null; then
+  case $1 in 
+    "left")
+      bspc node -v -20 0
+    ;;
+    "right")
+      bspc node -v 20 0
+    ;;
+    "down")
+      bspc node -v 0 20
+    ;;
+    "up")
+      bspc node -v 0 -20
+    ;;
+  esac
+else
+  case $1 in 
+    "left")
+      bspc node -s west
+    ;;
+    "right")
+      bspc node -s east
+    ;;
+    "down")
+      bspc node -s south
+    ;;
+    "up")
+      bspc node -s north
+    ;;
+  esac
+fi

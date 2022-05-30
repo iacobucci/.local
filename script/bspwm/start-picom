@@ -1,0 +1,3 @@
+#!/bin/sh
+
+[[ -z $NO_FIRST_RUN ]] && (sleep 12; picom --config ~/.config/picom/picomrc --experimental; notify-send "picom was run") || ( picom --config ~/.config/picom/picomrc --experimental)

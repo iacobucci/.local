@@ -1,0 +1,3 @@
+#!/bin/sh
+[[ $(xtitle $(bspc query -N -n $1)) -eq "plank" ]] || bspc node -f $1
+

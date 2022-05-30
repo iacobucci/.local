@@ -1,0 +1,4 @@
+#!/bin/sh
+[[ $(xtitle $(bspc query -N -n .window -d .active) | grep -v "plank" | wc -l) -ge 1 ]] && bspc desktop -f next || bspc desktop -f next.occupied
+# [[ $(bspc query -N -n .window -d .active | wc -l) -gt 0 ]] && bspc desktop -f next || bspc desktop -f next.occupied
+

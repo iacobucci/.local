@@ -1,0 +1,17 @@
+#!/bin/sh
+
+LAST_MONITOR=$(head -n1 ~/.cache/bspwm/last-monitor)
+
+save_last_monitor() {
+	bspc query -T -d focused | jq '.["name"]' | sed "s/\"//g" > ~/.cache/bspwm/last-monitor
+}
+
+echo $LAST_MONITOR
+
+if [[ $LAST_MONITOR -ne "7" ]]; then
+	save_last_monitor
+	bspc desktop -f 7
+else
+	save_last_monitor
+	bspc desktop -f $LAST_MONITOR
+fi

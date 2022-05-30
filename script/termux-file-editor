@@ -1,0 +1,8 @@
+#vi:syntax=sh
+# str="echo 'File editor: ' && read input && sh -c '$input ${1}'"
+# tmux new-session -s edit -c "sh -c $str"
+# echo 'File editor: '
+# read input
+# sh -c "$input $1" &
+
+vi $1

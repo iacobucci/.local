@@ -1,0 +1,5 @@
+#!/bin/sh
+[[ $(bspc query -N -n .window -d .active) -eq "
+" ]] && bspc desktop -f $1.occupied || bspc desktop -f $1
+# [[ $(bspc query -N -n .window -d .active | wc -l) -gt 0 ]] && bspc desktop -f next || bspc desktop -f next.occupied
+

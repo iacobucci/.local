@@ -1,0 +1,10 @@
+#!/bin/sh
+
+s=""
+
+for i in $@; do
+	[ $i = "--" ] && continue
+	s="$s $i"
+done
+
+tilix -e "$s"

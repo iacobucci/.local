@@ -1,0 +1,2 @@
+#!/bin/sh
+[[ $(xtitle $(bspc query -N -n .window -d .active) | wc -l) -lt 1 ]] && sh -c "bspc node -d next.occupied ; bspc desktop -f next.occupied" || sh -c "bspc node -d next ; bspc desktop -f next"

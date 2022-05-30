@@ -1,0 +1,66 @@
+#!/bin/python3
+
+import sys
+import os
+
+if len(sys.argv) == 1:
+    exit()
+
+name = sys.argv[1]
+
+extension = name.split(".")
+extension = extension[len(extension)-1]
+
+basename = name.split(".")
+basename = "".join(basename[0:len(basename)-1])
+
+
+def c():
+    present = "makefile" in [i.lower() for i in os.listdir()]
+    if not present:
+        with open("makefile", "w") as mf:
+            mf.write("program:\n\tgcc -lm -g " +
+                    name + " -o " + basename + ".out" + "\n\nrun:\n\t./" + basename + ".out")
+    os.system("make")
+    os.system("make run")
+
+def cpp():
+    present = "makefile" in [i.lower() for i in os.listdir()]
+    if not present:
+        with open("makefile", "w") as mf:
+            mf.write("program:\n\tg++ -lm -g " +
+                    name + " -o " + basename + ".out" + "\n\nrun:\n\t./" + basename + ".out")
+    os.system("make")
+    os.system("make run")
+
+def py():
+    os.system("python3 " + name)
+
+def js():
+    os.system("node " + name)
+
+def java():
+    os.system("javac Main.java")
+    os.system("java Main")
+
+
+assoc = {("c",): c, ("cpp",): cpp,("py",):py,("js",):js,("java",):java}
+
+
+def main():
+    default = True
+    for key in assoc.keys():
+        if extension in key:
+            assoc[key]()
+            default = False
+    
+    if default:
+        os.system("zsh")
+
+    # if default:
+    #     os.system("xdg-open " + name)
+
+
+if __name__ == "__main__":
+    main()
+    input()

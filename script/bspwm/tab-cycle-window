@@ -1,0 +1,3 @@
+#!/bin/sh 
+[[ $(xtitle $(bspc query -N -n $1.window)) -eq "plank" ]] && sh -c " bspc node -f $1.!hidden.window ; sleep 0.02 ; bspc node -f $1.!hidden.window " || bspc node -f $1.!hidden.window
+

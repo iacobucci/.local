@@ -1,0 +1,2 @@
+#!/bin/sh
+unlink /home/valerio/.config/bspwm/wallpaper ; ln -sn /home/valerio/.local/folders/pictures/wallpapers/landscape/$1 /home/valerio/.config/bspwm/wallpaper ; bspc wm -r

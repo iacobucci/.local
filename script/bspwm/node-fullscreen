@@ -1,0 +1,11 @@
+#!/bin/sh
+if xtitle $(bspc query -N -n) | grep -q "plank"  ; then
+  break
+else
+  if bspc query -N -n "focused.fullscreen" >> /dev/null; then
+    bspc node -t tiled
+  else
+    bspc node -t fullscreen
+  fi
+fi
+

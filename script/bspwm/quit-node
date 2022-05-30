@@ -1,0 +1,6 @@
+#!/bin/sh
+if xtitle $(bspc query -N -n) | grep -q "plank"  ; then
+  break
+else
+  bspc node -$1
+fi

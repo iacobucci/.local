@@ -1,0 +1,2 @@
+#!/bin/bash
+gsettings set org.gnome.desktop.peripherals.keyboard repeat false ; antimicrox --profile ~/documents/resources/antimicrox/shakedown.gamecontroller.amgp & cd ~/documents/rom/windows/shakedown_hawaii/game ;  wine ~/documents/rom/windows/shakedown_hawaii/game/shakedown.exe ; gsettings set org.gnome.desktop.peripherals.keyboard repeat true

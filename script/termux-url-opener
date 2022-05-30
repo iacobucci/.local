@@ -1,0 +1,116 @@
+#vi:syntax=sh
+url=$1
+
+echo "y) video"
+echo "o) audio"
+echo "w) download" 
+echo "e) else"
+echo "x) exit"
+
+read CHOICE
+case $CHOICE in
+    y)
+    title=$(~/.local/bin/youtube-dl -e $url)
+    title=$( echo $title | sed -e 's/\(.*\)/\L\1/')
+    title=$(echo $title| tr -s ' ' | tr ' ' '_')
+
+    ~/.local/bin/youtube-dl -F $url | grep mp4
+    echo "Quality: "
+    read input
+    ~/.local/bin/youtube-dl -f $input -o "/storage/emulated/0/Movies/Youtube/$title.%(ext)s" $url
+	;;
+    o)
+	  echo "Artist: "
+	  read artist
+	  echo "Title: "
+	  read title
+
+    artist=$( echo $artist | sed -e 's/\(.*\)/\L\1/')
+    title=$( echo $title | sed -e 's/\(.*\)/\L\1/')
+    artist=$(echo $artist| tr -s ' ' | tr ' ' '_')
+    title=$(echo $title| tr -s ' ' | tr ' ' '_')
+
+	  ~/.local/bin/youtube-dl --extract-audio --audio-format mp3 --output "/storage/emulated/0/Music/$artist-$title.%(ext)s" $url
+  	~/.local/bin/mid3v2 -a $artist -t $title /storage/emulated/0/Music/$artist-$title.mp3
+	;;
+    e)
+    echo "Bash command with url: "
+    read input
+    # command=${input//url/$url}
+    command=$(echo "$input" | sed "s/url/$url/")
+    zsh -c "$command"
+  ;;
+    w)
+    echo "w) ~/Download"
+    echo "m) ~/Music"
+    echo "r) ~/Pictures/Random"
+    echo "v) ~/Movies"
+    echo "d) ~/Documents"
+
+    read path
+    case $path in
+        d)  
+        cd ~/.local/.tmp
+        rm -rf ~/.local/.tmp/*
+        echo "title: "
+	      read title
+        title=$( echo $title | sed -e 's/\(.*\)/\L\1/')
+        title=$(echo $title| tr -s ' ' | tr ' ' '_')
+        wget --adjust-extension $url
+        name=$(ls ~/.local/.tmp)
+        ext="${name##*.}"
+        mv ~/.local/.tmp/* /storage/emulated/0/Documents/$title.$ext
+    ;;
+        m)
+        cd ~/.local/.tmp
+        rm -rf ~/.local/.tmp/*
+        echo "title: "
+	      read title
+        title=$( echo $title | sed -e 's/\(.*\)/\L\1/')
+        title=$(echo $title| tr -s ' ' | tr ' ' '_')
+        wget --adjust-extension $url
+        name=$(ls ~/.local/.tmp)
+        ext="${name##*.}"
+        mv ~/.local/.tmp/* /storage/emulated/0/Music/$title.$ext
+    ;;
+        r)
+        cd ~/.local/.tmp
+        rm -rf ~/.local/.tmp/*
+        echo "title: "
+	      read title
+        title=$( echo $title | sed -e 's/\(.*\)/\L\1/')
+        title=$(echo $title| tr -s ' ' | tr ' ' '_')
+        wget --adjust-extension $url
+        name=$(ls ~/.local/.tmp)
+        ext="${name##*.}"
+        mv ~/.local/.tmp/* /storage/emulated/0/Pictures/Random/$title.$ext
+    ;;
+        v)
+        cd ~/.local/.tmp
+        rm -rf ~/.local/.tmp/*
+        echo "title: "
+	      read title
+        title=$( echo $title | sed -e 's/\(.*\)/\L\1/')
+        title=$(echo $title| tr -s ' ' | tr ' ' '_')
+        wget --adjust-extension $url
+        name=$(ls ~/.local/.tmp)
+        ext="${name##*.}"
+        mv ~/.local/.tmp/* /storage/emulated/0/Movies/$title.$ext
+    ;;
+        w)
+        cd ~/.local/.tmp
+        rm -rf ~/.local/.tmp/*
+        echo "title: "
+	      read title
+        title=$( echo $title | sed -e 's/\(.*\)/\L\1/')
+        title=$(echo $title| tr -s ' ' | tr ' ' '_')
+        wget --adjust-extension $url
+        name=$(ls ~/.local/.tmp)
+        ext="${name##*.}"
+        mv ~/.local/.tmp/* /storage/emulated/0/Download/$title.$ext
+    ;;
+    esac
+	;;
+    x)
+	;; 
+esac

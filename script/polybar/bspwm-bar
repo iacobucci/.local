@@ -1,0 +1,107 @@
+#!/bin/sh
+
+icfirefox=""
+icterm=""
+icmovie=""
+icimage=""
+icardour="卑"
+icblender=""
+icgimp=""
+icinkscape=""
+ickupfer=""
+icretroarch=""
+
+#get $MONITOR variable from execution script
+#run command via system call
+#catch the output through pipe
+#parse the output script with json
+#initialize output_string
+#for every desktop make a list of opened windows
+#underline the active desktop with "%{u#" + undeline_color + "}"
+#color occupied desktops number with %{F-}
+#color unoccupied desktops number with %{F#999}
+#color focused window with %{F-}
+#color unfocused windows with %{F#999}
+#have the ability to make aliases of window classes
+
+if [[ $(bspc query -T --desktop | jq '.layout' | tr -d '"') == "monocle" ]];
+then
+  echo -n "%{u#15539e}%{+u}%{F-}  %{-u} %{F-}"
+else
+  echo -n "%{u#15539e}%{+u}%{F#999}  %{-u} %{F-}"
+fi
+
+underline_color="#15539e"
+node_color="#888"
+desktop_color="#BBB"
+current_desktop=$(bspc query --monitor --desktops --desktop)
+current_node=$(bspc query --monitor --nodes --node)
+i="0"
+for desktop in $(bspc query --monitor $MONITOR --desktops); do
+	i=$(($i + 1))
+
+	nodes=$(bspc query --desktop $desktop --nodes)
+
+	if [[ -z $nodes ]];
+	then
+		echo -n "%{F$desktop_color}"
+	else
+		echo -n "%{F-}"
+	fi
+
+	if [[ $desktop == $current_desktop ]]; then
+		echo -n "%{u$underline_color}%{+u} $i "
+	else
+		echo -n "%{-u} $i "
+	fi
+
+	for node in $nodes; do
+		name=$(xtitle $node)
+
+		if [[ $node == $current_node ]];
+		then
+			echo -n "%{F-}"
+		else
+			echo -n "%{F$node_color}"
+		fi
+
+		if [[ $name == *Firefox ]]; then
+			echo -n "firefox "
+		elif [[ $name == *Alacritty ]]; then
+			echo -n "tty "
+		elif [[ $name == *Xournal++ ]]; then
+			echo -n "xopp "
+		elif [[ $name == *scratchpad ]]; then
+			echo -n "scratch "
+		elif [[ $name == *Celluloid ]]; then
+			echo -n "video "
+		elif [[ $name == *vimiv ]]; then
+			echo -n "image "
+		elif [[ $name == *GNU\ Image\ Manipulation\ Program ]]; then
+			echo -n "gimp "
+		elif [[ $name == *RetroArch\ \  ]] || [[ $name == *RetroArch ]]; then
+			echo -n "retro "
+		elif [[ $name == *Inkscape ]]; then
+			echo -n "ink "
+		elif [[ $name == *Blender ]]; then
+			echo -n "blender "
+		elif [[ $name == *Ardour ]]; then
+			echo -n "ardour "
+		elif [[ $name == *Kupfer ]]; then
+			echo -n "kup "
+
+		elif [[ -z $name ]]; then
+			echo -n ""
+		else
+			echo -n "$name "
+		fi
+
+		echo -n "%{F-}"
+	done
+
+	if [[ $desktop == $current_desktop ]]; then
+		echo -n "%{-u}"
+	fi
+
+done
+

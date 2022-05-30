@@ -1,0 +1,14 @@
+#!/bin/sh
+
+export MONITOR=$([[ -n $(xrandr --listmonitors | grep DP2-1) ]] && echo DP2-1 || echo eDP1) 
+
+bspc config -m $MONITOR top_padding 32 &
+
+CPID=$(pgrep -x polybar)
+
+if [ -n "${CPID}" ] ; then
+  kill -TERM ${CPID}
+fi
+
+polybar --reload bar &
+
