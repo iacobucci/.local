@@ -31,6 +31,8 @@ else
   echo -n "%{u#15539e}%{+u}%{F#999}  %{-u} %{F-}"
 fi
 
+# export MONITOR=$([[ -n $(xrandr --listmonitors | grep DP2-1) ]] && echo DP2-1 || echo eDP1) 
+
 underline_color="#15539e"
 node_color="#888"
 desktop_color="#BBB"
@@ -67,18 +69,22 @@ for desktop in $(bspc query --monitor $MONITOR --desktops); do
 
 		if [[ $name == *Firefox ]]; then
 			echo -n "firefox "
+		elif [[ $name == *"Firefox (Private Browsing)" ]]; then
+			echo -n "prvt "
 		elif [[ $name == *Alacritty ]]; then
 			echo -n "tty "
 		elif [[ $name == *Xournal++ ]]; then
-			echo -n "xopp "
+			echo -n $(echo $name | sed "s/ - Xournal++//")" "
 		elif [[ $name == *scratchpad ]]; then
 			echo -n "scratch "
 		elif [[ $name == *Celluloid ]]; then
-			echo -n "video "
-		elif [[ $name == *vimiv ]]; then
-			echo -n "image "
-		elif [[ $name == *GNU\ Image\ Manipulation\ Program ]]; then
+			echo -n "celluloid "
+		elif [[ $name == "vimiv - "* ]]; then
+			echo -n $name | cut -c 9-
+		elif [[ $name == *"GNU Image Manipulation Program" ]]; then
 			echo -n "gimp "
+		elif [[ $name == *"GIMP" ]]; then
+			echo -n "${name%]*} " | sed "s/\[//"
 		elif [[ $name == *RetroArch\ \  ]] || [[ $name == *RetroArch ]]; then
 			echo -n "retro "
 		elif [[ $name == *Inkscape ]]; then
@@ -87,6 +93,8 @@ for desktop in $(bspc query --monitor $MONITOR --desktops); do
 			echo -n "blender "
 		elif [[ $name == *Ardour ]]; then
 			echo -n "ardour "
+		elif [[ $name == *GVncViewer ]]; then
+			echo -n "vnc "
 		elif [[ $name == *Kupfer ]]; then
 			echo -n "kup "
 
