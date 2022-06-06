@@ -40,8 +40,8 @@ def js():
     os.system("node " + name)
 
 def java():
-    os.system("javac Main.java")
-    os.system("java Main")
+    os.system("javac *.java")
+    os.system("zsh")
 
 
 assoc = {("c",): c, ("cpp",): cpp,("py",):py,("js",):js,("java",):java}

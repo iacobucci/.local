@@ -1,0 +1,6 @@
+#!/bin/sh
+qemu-system-x86_64 -blockdev driver=file,node-name=f0,filename=/home/valerio/.local/qemu/virtio.iso -device floppy,drive=f0 -hda /home/valerio/.local/qemu/win10.img -boot c -enable-kvm -cpu host -m 4G -vga std -net user -usbdevice tablet &
+
+sleep 2
+
+gvncviewer ::1:5900

@@ -1,0 +1,8 @@
+touch .classpath
+touch .project
+rm .project
+
+for j in *.java;
+do 
+echo \<classpathentry kind=\"src\" path=\"$(pwd)/$j\"/\> >> .project
+done

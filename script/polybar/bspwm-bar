@@ -24,14 +24,27 @@ icretroarch=""
 #color unfocused windows with %{F#999}
 #have the ability to make aliases of window classes
 
-if [[ $(bspc query -T --desktop | jq '.layout' | tr -d '"') == "monocle" ]];
-then
-  echo -n "%{u#15539e}%{+u}%{F-}  %{-u} %{F-}"
-else
-  echo -n "%{u#15539e}%{+u}%{F#999}  %{-u} %{F-}"
+if [ $# -eq 1 ]; then
+	
+	old=$(head -n1 ~/.local/script/polybar/show-nodes)
+
+	if [ $1 == "--toggle" ]; then
+	
+		echo "true" >~/.local/script/polybar/show-nodes
+
+		if [ $old == "true" ]; then
+			echo "false" >~/.local/script/polybar/show-nodes
+		fi
+
+	fi
 fi
 
-# export MONITOR=$([[ -n $(xrandr --listmonitors | grep DP2-1) ]] && echo DP2-1 || echo eDP1) 
+if [[ $(bspc query -T --desktop | jq '.layout' | tr -d '"') == "monocle" ]]; then
+	echo -n "%{u#15539e}%{+u}%{F-}  %{-u} %{F-}"
+else
+	echo -n "%{u#15539e}%{+u}%{F#999}  %{-u} %{F-}"
+fi
+# export MONITOR=$([[ -n $(xrandr --listmonitors | grep DP2-1) ]] && echo DP2-1 || echo eDP1)
 
 underline_color="#15539e"
 node_color="#888"
@@ -44,8 +57,7 @@ for desktop in $(bspc query --monitor $MONITOR --desktops); do
 
 	nodes=$(bspc query --desktop $desktop --nodes)
 
-	if [[ -z $nodes ]];
-	then
+	if [[ -z $nodes ]]; then
 		echo -n "%{F$desktop_color}"
 	else
 		echo -n "%{F-}"
@@ -57,59 +69,63 @@ for desktop in $(bspc query --monitor $MONITOR --desktops); do
 		echo -n "%{-u} $i "
 	fi
 
-	for node in $nodes; do
-		name=$(xtitle $node)
+	if [ $(head -n1 ~/.local/script/polybar/show-nodes) == "true" ]; then
 
-		if [[ $node == $current_node ]];
-		then
+		for node in $nodes; do
+			name=$(xtitle $node)
+
+			if [[ $node == $current_node ]]; then
+				echo -n "%{F-}"
+			else
+				echo -n "%{F$node_color}"
+			fi
+
+			if [[ $name == *Firefox ]]; then
+				echo -n "firefox "
+			elif [[ $name == *"Firefox (Private Browsing)" ]]; then
+				echo -n "prvt "
+			elif [[ $name == "Developer Tools — "* ]]; then
+				echo -n "dev"
+			elif [[ $name == *Alacritty ]]; then
+				echo -n "tty "
+			elif [[ $name == *Xournal++ ]]; then
+				echo -n $(echo $name | sed "s/ - Xournal++//")" "
+			elif [[ $name == *scratchpad ]]; then
+				echo -n "scratch "
+			elif [[ $name == *Celluloid ]]; then
+				echo -n "celluloid "
+			elif [[ $name == "vimiv - "* ]]; then
+				echo -n $name | cut -c 9-
+			elif [[ $name == *"GNU Image Manipulation Program" ]]; then
+				echo -n "gimp "
+			elif [[ $name == *"GIMP" ]]; then
+				echo -n "${name%]*} " | sed "s/\[//"
+			elif [[ $name == *RetroArch\ \  ]] || [[ $name == *RetroArch ]]; then
+				echo -n "retro "
+			elif [[ $name == *Inkscape ]]; then
+				echo -n "${name%-*}"
+			elif [[ $name == *Blender ]]; then
+				echo -n "blender "
+			elif [[ $name == *Ardour ]]; then
+				echo -n "ardour "
+			elif [[ $name == *GVncViewer ]]; then
+				echo -n "vnc "
+			elif [[ $name == *Kupfer ]]; then
+				echo -n "kup "
+
+			elif [[ -z $name ]]; then
+				echo -n ""
+			else
+				echo -n "$name "
+			fi
+
 			echo -n "%{F-}"
-		else
-			echo -n "%{F$node_color}"
-		fi
+		done
 
-		if [[ $name == *Firefox ]]; then
-			echo -n "firefox "
-		elif [[ $name == *"Firefox (Private Browsing)" ]]; then
-			echo -n "prvt "
-		elif [[ $name == *Alacritty ]]; then
-			echo -n "tty "
-		elif [[ $name == *Xournal++ ]]; then
-			echo -n $(echo $name | sed "s/ - Xournal++//")" "
-		elif [[ $name == *scratchpad ]]; then
-			echo -n "scratch "
-		elif [[ $name == *Celluloid ]]; then
-			echo -n "celluloid "
-		elif [[ $name == "vimiv - "* ]]; then
-			echo -n $name | cut -c 9-
-		elif [[ $name == *"GNU Image Manipulation Program" ]]; then
-			echo -n "gimp "
-		elif [[ $name == *"GIMP" ]]; then
-			echo -n "${name%]*} " | sed "s/\[//"
-		elif [[ $name == *RetroArch\ \  ]] || [[ $name == *RetroArch ]]; then
-			echo -n "retro "
-		elif [[ $name == *Inkscape ]]; then
-			echo -n "ink "
-		elif [[ $name == *Blender ]]; then
-			echo -n "blender "
-		elif [[ $name == *Ardour ]]; then
-			echo -n "ardour "
-		elif [[ $name == *GVncViewer ]]; then
-			echo -n "vnc "
-		elif [[ $name == *Kupfer ]]; then
-			echo -n "kup "
-
-		elif [[ -z $name ]]; then
-			echo -n ""
-		else
-			echo -n "$name "
-		fi
-
-		echo -n "%{F-}"
-	done
+	fi
 
 	if [[ $desktop == $current_desktop ]]; then
 		echo -n "%{-u}"
 	fi
 
 done
-
